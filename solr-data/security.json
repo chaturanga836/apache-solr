@@ -1,0 +1,9 @@
+{
+  "authentication": {
+    "class": "solr.BasicAuthPlugin",
+    "credentials": {
+      "solr": "hashed‑password"
+    },
+    "blockUnknown": true
+  }
+}
