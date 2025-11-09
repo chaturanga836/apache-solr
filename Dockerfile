@@ -1,16 +1,14 @@
+# Start from the official Solr base image
 FROM solr:9.6.1
 
-# Copy the Python script
+# Copy initialization script into Solr's init directory
+# Make sure the script is already executable before build (chmod +x locally)
 COPY scripts/generate-security.py /docker-entrypoint-initdb.d/
-
-# Copy .env for environment variables (optional, you can also pass at runtime)
 COPY .env /docker-entrypoint-initdb.d/.env
 
-# Ensure the script is executable
-RUN chmod +x /docker-entrypoint-initdb.d/generate-security.py
-
-# Expose Solr port
+# Expose Solr's default port
 EXPOSE 8983
 
-# Start Solr (entrypoint is already set in base image)
+# Default entrypoint provided by Solr image
+ENTRYPOINT ["docker-entrypoint.sh"]
 CMD ["solr-foreground"]
