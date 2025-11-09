@@ -4,9 +4,8 @@ services:
     container_name: ranger-solr
     restart: always
     environment:
-      - SOLR_HOME=/var/solr/data
-      - SOLR_USER=${SOLR_USER}
-      - SOLR_PASS=${SOLR_PASS}
+      SOLR_USER: ${SOLR_USER}
+      SOLR_PASS: ${SOLR_PASS}
     ports:
       - "8983:8983"
     volumes:
