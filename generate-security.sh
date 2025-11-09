@@ -4,7 +4,7 @@ set -e
 SOLR_USER=${SOLR_USER:-solr}
 SOLR_PASS=${SOLR_PASS:-SolrRocks}
 SOLR_HOME="/var/solr/data"
-SECURITY_FILE="$SOLR_HOME/data/security.json"
+SECURITY_FILE="$SOLR_HOME/security.json"
 
 # Wait until Solr is up
 until curl -s "http://localhost:8983/solr/admin/info/system" > /dev/null; do
@@ -23,5 +23,6 @@ else
     echo "security.json already exists, skipping..."
 fi
 
-# Keep container alive
-tail -f /dev/null
+# Start Solr in foreground
+exec solr start -f
+
