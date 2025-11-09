@@ -3,7 +3,7 @@ set -e
 
 SOLR_USER=${SOLR_USER:-solr}
 SOLR_PASS=${SOLR_PASS:-SolrRocks}
-SOLR_HOME="/var/solr/data"
+SOLR_HOME="/var/solr"
 SECURITY_FILE="$SOLR_HOME/security.json"
 
 # Wait until Solr is up
