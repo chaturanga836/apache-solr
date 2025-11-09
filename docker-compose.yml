@@ -1,15 +1,12 @@
+
 services:
   solr:
-    image: solr:9.6.1
+    build: .
     container_name: ranger-solr
     restart: always
-    environment:
-      SOLR_USER: ${SOLR_USER}                # from .env
-      SOLR_PASS: ${SOLR_PASS}                # from .env
-      # SOLR_AUTH_TYPE: basicAuth              # enables basic authentication
-      # SOLR_AUTHENTICATION_OPTS: "-credentials ${SOLR_USER}:${SOLR_PASS} -blockUnknown true"
+    env_file:
+      - ./.env
     ports:
       - "8983:8983"
     volumes:
-      - ./solr-data:/var/solr               # persistence for cores and config
-    command: solr start -f                   # start Solr in foreground
+      - ./solr-data:/var/solr
