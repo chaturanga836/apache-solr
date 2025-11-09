@@ -11,16 +11,4 @@ services:
     volumes:
       - ./solr-data:/var/solr
       - ./generate-security.sh:/solr-init/generate-security.sh
-    command: solr start -f   # Start Solr normally
-
-  solr-init:
-    image: solr:9.6.1
-    depends_on:
-      - solr
-    environment:
-      SOLR_USER: ${SOLR_USER}
-      SOLR_PASS: ${SOLR_PASS}
-    volumes:
-      - ./solr-data:/var/solr
-      - ./generate-security.sh:/solr-init/generate-security.sh
-    entrypoint: ["bash", "/solr-init/generate-security.sh"]
+    command: ["bash", "/solr-init/generate-security.sh"]

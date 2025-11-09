@@ -4,7 +4,7 @@ set -e
 SOLR_USER=${SOLR_USER:-solr}
 SOLR_PASS=${SOLR_PASS:-SolrRocks}
 SOLR_HOME="/var/solr"
-SECURITY_FILE="$SOLR_HOME/security.json"
+SECURITY_FILE="/var/solr/security.json"
 
 # Wait until Solr is up
 until curl -s "http://localhost:8983/solr/admin/info/system" > /dev/null; do
