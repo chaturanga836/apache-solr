@@ -11,4 +11,5 @@ services:
     volumes:
       - ./solr-data:/var/solr
       - ./generate-security.sh:/solr-init/generate-security.sh
+      - ./.env:/solr-init/.env 
     command: ["bash", "/solr-init/generate-security.sh"]
