@@ -1,11 +1,11 @@
-
 services:
   zookeeper:
     image: zookeeper:3.9
     container_name: solr-zk
-    restart: always
+    # restart: always
     ports:
       - "2181:2181"
+
   solr:
     build: .
     container_name: ranger-solr
@@ -14,13 +14,14 @@ services:
     environment:
       SOLR_OPTS: "-DzkHost=zookeeper:2181"
     command: solr-foreground -c
-    restart: always
+    # restart: always
     env_file:
       - ./.env
     ports:
       - "8983:8983"
     volumes:
-      - ./solr-data:/var/solr
+      - solr-data:/var/solr
       - ./solr-config:/opt/solr-config:ro
+
 volumes:
   solr-data:
