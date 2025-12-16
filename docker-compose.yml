@@ -7,7 +7,7 @@ services:
     ports:
       - "2181:2181"
   solr:
-    build: ./solr
+    build: .
     container_name: ranger-solr
     depends_on:
       - zookeeper
