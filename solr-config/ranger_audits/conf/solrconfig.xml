@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<config>
+  <!-- SolrCloud support -->
+  <solrcloud>
+    <str name="host">ec2-65-0-150-75.ap-south-1.compute.amazonaws.com</str>
+    <int name="hostPort">8983</int>
+    <str name="hostContext">solr</str>
+    <bool name="zkClientTimeout">30000</bool>
+  </solrcloud>
+
+  <!-- Request handlers -->
+  <requestHandler name="/select" class="solr.SearchHandler"/>
+  <requestHandler name="/update" class="solr.UpdateRequestHandler"/>
+
+  <updateHandler class="solr.DirectUpdateHandler2"/>
+  
+  <!-- Auto commit -->
+  <autoCommit>
+    <maxTime>10000</maxTime> <!-- commit every 10 seconds -->
+  </autoCommit>
+
+  <!-- Logging -->
+  <requestDispatcher handleSelect="true"/>
+</config>

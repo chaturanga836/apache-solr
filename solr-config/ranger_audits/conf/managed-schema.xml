@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<schema name="ranger_audits" version="1.6">
+
+  <!-- Field Types -->
+  <fieldType name="string" class="solr.StrField" sortMissingLast="true" />
+  <fieldType name="text_general" class="solr.TextField" positionIncrementGap="100">
+    <analyzer>
+      <tokenizer class="solr.StandardTokenizerFactory"/>
+      <filter class="solr.LowerCaseFilterFactory"/>
+    </analyzer>
+  </fieldType>
+  <fieldType name="date" class="solr.TrieDateField" precisionStep="0" positionIncrementGap="0"/>
+
+  <!-- Fields -->
+  <field name="id" type="string" indexed="true" stored="true" required="true"/>
+  <field name="evtTime" type="date" indexed="true" stored="true"/>
+  <field name="component" type="string" indexed="true" stored="true"/>
+  <field name="action" type="string" indexed="true" stored="true"/>
+  <field name="result" type="string" indexed="true" stored="true"/>
+  <field name="user" type="string" indexed="true" stored="true"/>
+  <field name="clientIP" type="string" indexed="true" stored="true"/>
+  <field name="resourcePath" type="text_general" indexed="true" stored="true"/>
+
+  <!-- Unique Key -->
+  <uniqueKey>id</uniqueKey>
+
+  <!-- Dynamic Fields -->
+  <dynamicField name="attr_*" type="text_general" indexed="true" stored="true"/>
+</schema>
