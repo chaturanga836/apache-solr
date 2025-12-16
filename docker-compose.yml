@@ -20,7 +20,7 @@ services:
     ports:
       - "8983:8983"
     volumes:
-      - solr-data:/var/solr
+      - ./solr-data:/var/solr
       - ./solr-config:/opt/solr-config:ro
 volumes:
   solr-data:
