@@ -13,6 +13,7 @@ services:
       - zookeeper
     environment:
       SOLR_OPTS: "-DzkHost=zookeeper:2181"
+    command: solr-foreground -c
     restart: always
     env_file:
       - ./.env
@@ -20,5 +21,6 @@ services:
       - "8983:8983"
     volumes:
       - solr-data:/var/solr
+      - ./solr-config:/opt/solr-config:ro
 volumes:
   solr-data:

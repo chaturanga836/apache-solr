@@ -1,22 +1,16 @@
-# Start from the official Solr base image
 FROM solr:9.6.1
 
 USER root
-RUN apt-get update && apt-get install -y python3 python3-pip && rm -rf /var/lib/apt/lists/*
-# Copy initialization script into Solr's init directory
-# Make sure the script is already executable before build (chmod +x locally)
-COPY scripts/generate-security.py /docker-entrypoint-initdb.d/
-COPY scripts/init-security.sh /docker-entrypoint-initdb.d/
-COPY .env /docker-entrypoint-initdb.d/.env
 
-# Ensure init-security.sh is executable
-RUN chmod +x /docker-entrypoint-initdb.d/init-security.sh
+# Optional: install python ONLY if you truly need it
+RUN apt-get update && \
+    apt-get install -y python3 && \
+    rm -rf /var/lib/apt/lists/*
 
-# Expose Solr port
-EXPOSE 8983
+# Copy security helper (NOT auto-executed)
+COPY scripts/generate-security.py /opt/solr-tools/generate-security.py
+COPY scripts/init-security.sh /opt/solr-tools/init-security.sh
+RUN chmod +x /opt/solr-tools/init-security.sh
 
-# Switch back to Solr user
 USER solr
-# Default entrypoint provided by Solr image
-# ENTRYPOINT ["docker-entrypoint.sh"]
-# CMD ["solr-foreground"]
+EXPOSE 8983

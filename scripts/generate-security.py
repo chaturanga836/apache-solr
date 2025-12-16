@@ -5,28 +5,34 @@ import base64
 import hashlib
 import secrets
 import pwd
+import sys
 
-# Read env variables
 solr_user = os.environ.get("SOLR_USER", "solr")
 solr_pass = os.environ.get("SOLR_PASS", "SolrRocks")
 solr_role = os.environ.get("SOLR_ROLE", "administrator")
 
-salt_bytes = secrets.token_bytes(16)
-salt_b64 = base64.b64encode(salt_bytes).decode()
+security_path = "/var/solr/data/security.json"
 
-# Compute hash: base64(sha256(sha256(salt+password)))
-hash_bytes = hashlib.sha256(salt_bytes + solr_pass.encode()).digest()
-double_hash = hashlib.sha256(hash_bytes).digest()
-hash_b64 = base64.b64encode(double_hash).decode()
+# DO NOT overwrite existing security.json
+if os.path.exists(security_path):
+    print("✔ security.json already exists, skipping generation")
+    sys.exit(0)
 
-hashed_pass = f"{hash_b64} {salt_b64}"
-    
+salt = secrets.token_bytes(16)
+salt_b64 = base64.b64encode(salt).decode()
+
+hash1 = hashlib.sha256(salt + solr_pass.encode()).digest()
+hash2 = hashlib.sha256(hash1).digest()
+hash_b64 = base64.b64encode(hash2).decode()
+
 security_json = {
     "authentication": {
         "blockUnknown": True,
         "class": "solr.BasicAuthPlugin",
-        "credentials": {solr_user: hashed_pass},
-        "realm": "Lab Solr users",
+        "credentials": {
+            solr_user: f"{hash_b64} {salt_b64}"
+        },
+        "realm": "Ranger Solr users",
         "forwardCredentials": False
     },
     "authorization": {
@@ -40,16 +46,12 @@ security_json = {
     }
 }
 
-# Write security.json
-solr_home = "/var/solr/data"
-os.makedirs(solr_home, exist_ok=True)
-security_path = os.path.join(solr_home, "security.json")
+os.makedirs("/var/solr/data", exist_ok=True)
 with open(security_path, "w") as f:
-    json.dump(security_json, f, indent=4)
+    json.dump(security_json, f, indent=2)
 
-# Set ownership to solr user
 uid = pwd.getpwnam("solr").pw_uid
 gid = pwd.getpwnam("solr").pw_gid
 os.chown(security_path, uid, gid)
 
-print(f"✅ security.json generated at {solr_home}")
+print("✅ security.json created safely")
