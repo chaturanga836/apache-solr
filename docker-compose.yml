@@ -13,15 +13,13 @@ services:
       - zookeeper
     environment:
       SOLR_OPTS: "-DzkHost=zookeeper:2181"
-    command: solr-foreground -c
-    # restart: always
-    env_file:
-      - ./.env
+    command: bash -c "solr-foreground -c & /opt/solr-tools/init-solr.sh && wait"
     ports:
       - "8983:8983"
     volumes:
       - solr-data:/var/solr
       - ./solr-config:/opt/solr-config:ro
+
 
 volumes:
   solr-data:
