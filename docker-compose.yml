@@ -5,6 +5,8 @@ services:
     # restart: always
     ports:
       - "2181:2181"
+    networks:
+      - apache-solr_default
 
   solr:
     build: .
