@@ -23,3 +23,8 @@ services:
 
 volumes:
   solr-data:
+
+networks:
+  apache-solr_default:
+    name: apache-solr_default  # This forces the name to be EXACTLY this
+    driver: bridge
